@@ -97,8 +97,8 @@ export default function Map (props) {
     <Container style={{width: "90%"}}>
         <MapContainer
             className="markercluster-map"
-            center={[45.41646393998344, 9.235806119289835]}
-            zoom={13}
+            center={[45.43200003998344, 9.225806119289835]}
+            zoom={13.5}
             maxZoom={18}
         >
         {pointMap.map((i) => {

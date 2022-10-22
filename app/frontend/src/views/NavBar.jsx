@@ -18,7 +18,8 @@ import Map from './Map';
 
 export default function Navbar() {
   const [mapShow, setMapShow] = useState(false);
-  const [valueHour, setValueHour] = useState('');
+  const [valueHour, setValueHour] = useState('10:00');
+  const [valueHourRequest, setValueHourRequest] = useState('10:00');
   const [navbarState, setNavbarState] = useState(false);
   const { user, logoutUser, authTokens } = useContext(AuthContext);
   const html = document.querySelector("html");
@@ -113,9 +114,12 @@ export default function Navbar() {
     console.log(dateFormatYYYYMMDD)
     console.log(value)
     console.log(valueHour)
+    const valueHourReq = valueHour.format('HH:mm:ss')
+    console.log(valueHourReq)
     console.log(dataSetSelect)
     console.log(dataSets.epsg)
-    setMapData("https://apibeta.aria.fr/py/v2/maps/{z}/{x}/{y}/?apikey=0e112b8e77c27ef2ff7c3dbd98631fc2e392189b&format=png&dataset=ARIAVIEW_USER_TEST_RESULT_LcS&date="+dateFormatYYYYMMDD+"&time="+value+"T"+valueHour+"&variable="+dataSetSelect+"&epsg="+dataSets.epsg+"&is_atomic=1")
+    setValueHourRequest(valueHourReq)
+    setMapData("https://apibeta.aria.fr/py/v2/maps/{z}/{x}/{y}/?apikey=0e112b8e77c27ef2ff7c3dbd98631fc2e392189b&format=png&dataset=ARIAVIEW_USER_TEST_RESULT_LcS&date="+dateFormatYYYYMMDD+"&time="+value+"T"+valueHourReq+"&variable="+dataSetSelect+"&epsg="+dataSets.epsg+"&is_atomic=1")
     setShowMap(1)
   }
 
@@ -205,14 +209,22 @@ export default function Navbar() {
                         ampm={false}
                         shouldDisableTime={customTimeRenderer}
                         onChange={(newValue) => {
-                          setValueHour(newValue.format('HH:mm:ss'))
+                          console.log(newValue)
+                          setValueHour(newValue)
                         }}
                         renderInput={({ inputRef, inputProps, InputProps }) => (
-                          <Box sx={{ display: 'flex', alignItems: 'center' }} >
+                          <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <input ref={inputRef} {...inputProps} />
                             {InputProps?.endAdornment}
                           </Box>
                         )}
+
+                        // renderInput={({ inputRef, inputProps, InputProps }) => (
+                        //   <Box sx={{ display: 'flex', alignItems: 'center' }} >
+                        //     <input ref={inputRef} {...inputProps} />
+                        //     {InputProps?.endAdornment}
+                        //   </Box>
+                        // )}
                       />
                     </LocalizationProvider>
                     </li>
@@ -240,7 +252,7 @@ export default function Navbar() {
         <Map 
           data={mapData}
           valueData={value}
-          valueHour={valueHour}
+          valueHour={valueHourRequest}
           dataSet={dataSetSelect}
           epsg={dataSets.epsg}
         />
@@ -260,7 +272,7 @@ const Nav = styled.nav`
   padding: 0 1vw;
   border-bottom: 2px solid #0f1e7a;
   .logout-button {
-    margin-right: 25em;
+    margin-right: 10em;
   }
   a {
     text-decoration: none;
