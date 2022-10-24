@@ -85,12 +85,11 @@ export default function Map (props) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
     crossorigin=""/>,
-
     <Container style={{width: "90%"}}>
         <MapContainer
             className="markercluster-map"
             center={[45.43200003998344, 9.225806119289835]}
-            zoom={13}
+            zoom={15}
             maxZoom={18}
         >
         {pointMap.map((i) => {

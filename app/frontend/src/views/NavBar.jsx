@@ -32,8 +32,6 @@ export default function Navbar() {
   const [value, setValue] = useState(dayjs('2022-04-07'));
   const [mapData, setMapData] = useState('');
 
-  const [showMap, setShowMap] = useState(0);
-
 
   const refreshDataDate = () => {
     API.get(`datasets/ARIAVIEW_USER_TEST_RESULT_LcS`, { 
@@ -65,7 +63,6 @@ export default function Navbar() {
       
       const hourFormat = res.data.data.map((hour) => parseInt(hour.slice(11, 13)))
       setHourAvailable(hourFormat)
-      console.log(hourFormat)
     })
     .catch(console.error);
   };
@@ -114,7 +111,6 @@ export default function Navbar() {
     const valueHourReq = valueHour.format('HH:mm:ss')
     setValueHourRequest(valueHourReq)
     setMapData("https://apibeta.aria.fr/py/v2/maps/{z}/{x}/{y}/?apikey=0e112b8e77c27ef2ff7c3dbd98631fc2e392189b&format=png&dataset=ARIAVIEW_USER_TEST_RESULT_LcS&date="+dateFormatYYYYMMDD+"&time="+value+"T"+valueHourReq+"&variable="+dataSetSelect+"&epsg="+dataSets.epsg+"&is_atomic=1")
-    setShowMap(1)
   }
 
 
@@ -203,7 +199,6 @@ export default function Navbar() {
                         ampm={false}
                         shouldDisableTime={customTimeRenderer}
                         onChange={(newValue) => {
-                          console.log(newValue)
                           setValueHour(newValue)
                         }}
                         renderInput={({ inputRef, inputProps, InputProps }) => (
