@@ -66,7 +66,7 @@ export default function Navbar() {
     })
     .catch(console.error);
   };
-
+  console.log('hourAvailable =>',hourAvailable)
   const customDayRenderer = (date, selectedDates, pickersDayProps) => {
     if (dateAvailable.includes(date.format('YYYY-MM-DD'))) {
       return false
@@ -240,10 +240,11 @@ export default function Navbar() {
     
         <Map 
           data={mapData}
-          valueData={value}
+          valueDate={value}
           valueHour={valueHourRequest}
           dataSet={dataSetSelect}
           epsg={dataSets.epsg}
+          hourAvailable={hourAvailable}
         />
       </Container>
   );

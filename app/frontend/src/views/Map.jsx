@@ -42,16 +42,16 @@ export default function Map (props) {
 
   const dataPointSelected = (objectPointFormat) => {
     console.log(objectPointFormat)
-    console.log('props =>', props)
+    console.log('props =>', props.hourAvailable[props.hourAvailable.length - 1]+':00:00')
     API.post(`points/ts/ARIAVIEW_USER_TEST_RESULT_LcS`, objectPointFormat, { 
       params: {
-        'apikey': '0e112b8e77c27ef2ff7c3dbd98631fc2e392189b'
-        // 'variable': 
-        // 'epsg': 
-        // 'start_date': 
-        // 'end_date': 
-        // 'is_atomic': 1
-        // "tsmin": -1000 
+        'apikey': '0e112b8e77c27ef2ff7c3dbd98631fc2e392189b',
+        'variable': props.dataSet,
+        'epsg': props.epsg,
+        'start_date': props.valueDate+'T'+props.valueHour,
+        'end_date': props.valueDate+'T'+props.hourAvailable[props.hourAvailable.length - 1]+':00:00',
+        'is_atomic': 1,
+        "tsmin": -1000 
       },
       headers: {
         // 'Authorization': 'Bearer ' + authTokens.access
