@@ -8,6 +8,7 @@ import 'leaflet/dist/leaflet.css';
 import Proj from "proj4leaflet";
 import {CRS} from 'leaflet';
 import API from "../Api";
+import TimeSeries from "./TimeSeries";
 import markerIcon from "../styles/marker-icon.png"
 import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
@@ -21,6 +22,7 @@ export default function Map (props) {
   const { user, logoutUser } = useContext(AuthContext);
   const [pointMap, setPointMap] = useState([]);
   const [targetPointResources, setTargetPointResources] = useState([]);
+  const [visibleChart, setVisibleChart] = useState(false);
 
 
   const mapPoint = (dateSelected) => {
@@ -41,8 +43,8 @@ export default function Map (props) {
   };
 
   const dataPointSelected = (objectPointFormat) => {
-    console.log(objectPointFormat)
-    console.log('props =>', props.hourAvailable[props.hourAvailable.length - 1]+':00:00')
+    // console.log(objectPointFormat)
+    // console.log('props =>', props.hourAvailable[props.hourAvailable.length - 1]+':00:00')
     API.post(`points/ts/ARIAVIEW_USER_TEST_RESULT_LcS`, objectPointFormat, { 
       params: {
         'apikey': '0e112b8e77c27ef2ff7c3dbd98631fc2e392189b',
@@ -85,7 +87,7 @@ export default function Map (props) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
     crossorigin=""/>,
-    <Container style={{width: "90%"}}>
+    <Container style={{width: "90%",display: "flex"}}>
         <MapContainer
             className="markercluster-map"
             center={[45.43200003998344, 9.225806119289835]}
@@ -122,6 +124,9 @@ export default function Map (props) {
                       }
                     }
                     // console.log(objectPointFormat)
+                    // setVisibleChart(!visibleChart)
+                    setVisibleChart(1)
+
                     dataPointSelected(objectPointFormat)
                   },
                 }}
@@ -135,6 +140,8 @@ export default function Map (props) {
                   client: {i.client}<br />
                   Group: {i.group}<br />
                   {/* Height{i.height}<br /> */}
+                  {/* <TimeSeries/> */}
+
                 </Popup>
 
               </Marker>
@@ -151,6 +158,18 @@ export default function Map (props) {
             attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         </MapContainer>
+            {visibleChart && 
+
+              <Container>
+                <button>Close</button>
+                <TimeSeries
+                    // hideTS={visibleChart}
+                    placeholder="Loading component One..."> 
+                </TimeSeries>
+              </Container>
+              
+             
+            }
     </Container>
   );
 }

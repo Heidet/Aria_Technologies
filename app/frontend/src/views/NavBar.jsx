@@ -115,6 +115,7 @@ export default function Navbar() {
 
 
   return (
+    
       <Container >
         <Nav>
           <div className="brand1">
@@ -225,6 +226,7 @@ export default function Navbar() {
                       >
                       Envoyer
                     </Button>
+                    
                   </li>
                   {' '}
                   {/* <button onClick={logoutUser}>Logout</button> */}
@@ -237,16 +239,17 @@ export default function Navbar() {
             
           </ul>
         </Nav>
-    
-        <Map 
-          data={mapData}
-          valueDate={value}
-          valueHour={valueHourRequest}
-          dataSet={dataSetSelect}
-          epsg={dataSets.epsg}
-          hourAvailable={hourAvailable}
+      <Map 
+         data={mapData}
+         valueDate={value}
+         valueHour={valueHourRequest}
+         dataSet={dataSetSelect}
+         epsg={dataSets.epsg}
+         hourAvailable={hourAvailable}
         />
       </Container>
+      
+
   );
 }
 
