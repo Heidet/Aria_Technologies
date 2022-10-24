@@ -111,13 +111,7 @@ export default function Navbar() {
   const submitSearch = () => {
     var date = value.split('-')
     var dateFormatYYYYMMDD = date[0]+date[1]+date[2]
-    console.log(dateFormatYYYYMMDD)
-    console.log(value)
-    console.log(valueHour)
     const valueHourReq = valueHour.format('HH:mm:ss')
-    console.log(valueHourReq)
-    console.log(dataSetSelect)
-    console.log(dataSets.epsg)
     setValueHourRequest(valueHourReq)
     setMapData("https://apibeta.aria.fr/py/v2/maps/{z}/{x}/{y}/?apikey=0e112b8e77c27ef2ff7c3dbd98631fc2e392189b&format=png&dataset=ARIAVIEW_USER_TEST_RESULT_LcS&date="+dateFormatYYYYMMDD+"&time="+value+"T"+valueHourReq+"&variable="+dataSetSelect+"&epsg="+dataSets.epsg+"&is_atomic=1")
     setShowMap(1)

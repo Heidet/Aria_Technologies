@@ -12,6 +12,7 @@ import markerIcon from "../styles/marker-icon.png"
 import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
 import '../styles/styles.scss'
+import { GiConsoleController } from "react-icons/gi";
 
 
 export default function Map (props) {
@@ -19,7 +20,7 @@ export default function Map (props) {
   const { loginUser } = useContext(AuthContext);
   const { user, logoutUser } = useContext(AuthContext);
   const [pointMap, setPointMap] = useState([]);
-  const [targetPoint, setTargetPoint] = useState();
+  const [targetPointResources, setTargetPointResources] = useState([]);
 
 
   const mapPoint = (dateSelected) => {
@@ -38,25 +39,29 @@ export default function Map (props) {
     })
     .catch(console.error);
   };
-  // const dataPointSelected = (dateSelected) => {
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     params: {
-  //           'apikey': '0e112b8e77c27ef2ff7c3dbd98631fc2e392189b'
-  //           'variable': 
-  //           'epsg': 
-  //           'start_date': 
-  //           'end_date': 
-  //           'is_atomic': 
-  //         },
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: targetPoint
-  //   };
-  // fetch('https://reqres.in/api/posts', requestOptions)
-  //     .then(response => console.log(res))
 
-  // };
-  // const usersName = JSON.stringify({ 975:"r_index": 18, "r_name": "test_u2", "lat": 45.44404065601944, "lon": 9.24581815237172, "client": 8 , "group": 4 ,"height": null});
+  const dataPointSelected = (objectPointFormat) => {
+    console.log(objectPointFormat)
+    console.log('props =>', props)
+    API.post(`points/ts/ARIAVIEW_USER_TEST_RESULT_LcS`, objectPointFormat, { 
+      params: {
+        'apikey': '0e112b8e77c27ef2ff7c3dbd98631fc2e392189b'
+        // 'variable': 
+        // 'epsg': 
+        // 'start_date': 
+        // 'end_date': 
+        // 'is_atomic': 1
+        // "tsmin": -1000 
+      },
+      headers: {
+        // 'Authorization': 'Bearer ' + authTokens.access
+      }
+    })
+    .then((res) => {
+        console.log(res)
+    })
+    .catch(console.error);
+  };
 
   if(pointMap.length === 0){
     mapPoint()
@@ -68,18 +73,6 @@ export default function Map (props) {
     }
   });
 
-  const crs = new Proj.CRS(
-    "EPSG:32632",
-    "+proj=utm +zone=32 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
-    // {
-    //     resolutions: [
-    //         8192, 4096, 2048, 1024, 512, 256, 128,
-    //         64, 32, 16, 8, 4, 2, 1, 0.5
-    //     ],
-    // //  origin: [0, 0],
-    //     transformation: Leaflet.Transformation(1, 0, -1, 0)
-    // }
-  );
   const iconMarkup = renderToStaticMarkup(
       <ImgMarker src={markerIcon} />
   );
@@ -88,7 +81,6 @@ export default function Map (props) {
       html: iconMarkup
   });
 
-  
   return (
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
@@ -98,7 +90,7 @@ export default function Map (props) {
         <MapContainer
             className="markercluster-map"
             center={[45.43200003998344, 9.225806119289835]}
-            zoom={13.5}
+            zoom={13}
             maxZoom={18}
         >
         {pointMap.map((i) => {
@@ -109,21 +101,29 @@ export default function Map (props) {
                 icon={customMarkerIcon}
                 eventHandlers={{
                   click: (e) => {
-                    // console.log(i)
-                    // const req = JSON.stringify({ 
-                    //   975:{
-                    //     "lat": 45.44404065601944, 
-                    //     "lon": 9.24581815237172, 
-                    //     "r_index": 18, 
-                    //     "r_name": "test_u2", 
-                    //     "client": 8 , 
-                    //     "group": 4 ,
-                    //     "height": null
-                    //   }
-                    // })
-                    // // console.log(req)
-                    // setTargetPoint(req)
-                    // console.log(targetPoint)
+                    const idPoint = i.id
+                    const r_indexPoint = i.r_index
+                    const r_namePoint = i.r_name
+                    const latPoint = i.lat
+                    const lonPoint = i.lon
+                    const heightPoint = i.height
+                    const userPoint = i.user
+                    const groupPoint = i.group
+                    const clientPoint = i.client
+                    const objectPointFormat = {
+                      [idPoint]:{
+                        "lat": latPoint,
+                        "lon": lonPoint,
+                        "r_name": r_namePoint,
+                        "r_index": r_indexPoint,
+                        "height": heightPoint,
+                        "user": userPoint,
+                        "group": groupPoint,
+                        "client": clientPoint
+                      }
+                    }
+                    // console.log(objectPointFormat)
+                    dataPointSelected(objectPointFormat)
                   },
                 }}
                 >
