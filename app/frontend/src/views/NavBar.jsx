@@ -66,7 +66,7 @@ export default function Navbar() {
     })
     .catch(console.error);
   };
-  console.log('hourAvailable =>',hourAvailable)
+  // console.log('hourAvailable =>',hourAvailable)
   const customDayRenderer = (date, selectedDates, pickersDayProps) => {
     if (dateAvailable.includes(date.format('YYYY-MM-DD'))) {
       return false

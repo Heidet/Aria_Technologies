@@ -2,49 +2,45 @@ import { useState, useContext, useRef, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import { Container, Row, Col, Card, CardBody, Button } from "reactstrap";
 import styled from "styled-components";
-import MarkerClusterGroup from "react-leaflet-markercluster";
 import { MapContainer, TileLayer, Marker, Popup, GeoJSON } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
-import Proj from "proj4leaflet";
-import {CRS} from 'leaflet';
 import API from "../Api";
 import TimeSeries from "./TimeSeries";
 import markerIcon from "../styles/marker-icon.png"
 import { renderToStaticMarkup } from "react-dom/server";
 import { divIcon } from "leaflet";
 import '../styles/styles.scss'
-import { GiConsoleController } from "react-icons/gi";
 
 
 export default function Map (props) {
   const ref = useRef(null);
-  const { loginUser } = useContext(AuthContext);
-  const { user, logoutUser } = useContext(AuthContext);
+  const { loginUser, user, logoutUser } = useContext(AuthContext);
   const [pointMap, setPointMap] = useState([]);
-  const [targetPointResources, setTargetPointResources] = useState([]);
+  const [targetPointTimes, setTargetPointTimes] = useState([]);
+  const [targetPointValues, setTargetPointValues] = useState([]);
   const [visibleChart, setVisibleChart] = useState(false);
-
 
   const mapPoint = (dateSelected) => {
     API.get(`points/receptors/`, { 
       params: {
         'client': 'test_user'
-        // 'dataset_name': 'ARIAVIEW_USER_TEST_RESULT_LcS'
       },
       headers: {
         // 'Authorization': 'Bearer ' + authTokens.access
       }
     })
     .then((res) => {
-        console.log(res)
+        // console.log(res)
         setPointMap(res.data)
     })
     .catch(console.error);
   };
 
-  const dataPointSelected = (objectPointFormat) => {
-    // console.log(objectPointFormat)
-    // console.log('props =>', props.hourAvailable[props.hourAvailable.length - 1]+':00:00')
+  const handleChildClick = () => {
+    setVisibleChart(!visibleChart);
+  }
+
+  const dataPointSelected = (objectPointFormat, idPoint) => {
     API.post(`points/ts/ARIAVIEW_USER_TEST_RESULT_LcS`, objectPointFormat, { 
       params: {
         'apikey': '0e112b8e77c27ef2ff7c3dbd98631fc2e392189b',
@@ -60,7 +56,17 @@ export default function Map (props) {
       }
     })
     .then((res) => {
-        console.log(res)
+        // console.log(res)
+        var dataSetProps = props.dataSet
+        const timeSeriesTimes = res.data.data[dataSetProps].atomic.times
+        const timeSeriesValues = res.data.data[dataSetProps].atomic.values[idPoint]
+        // console.log('timeSeriesValues =>',timeSeriesValues)
+        // console.log('timeSeriesTimes =>',timeSeriesTimes)
+        setTargetPointTimes('')
+        setTargetPointValues('')
+        setTargetPointTimes(timeSeriesTimes)
+        setTargetPointValues(timeSeriesValues)
+        setVisibleChart(true)
     })
     .catch(console.error);
   };
@@ -82,6 +88,7 @@ export default function Map (props) {
   const customMarkerIcon = divIcon({
       html: iconMarkup
   });
+
 
   return (
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
@@ -123,15 +130,12 @@ export default function Map (props) {
                         "client": clientPoint
                       }
                     }
-                    // console.log(objectPointFormat)
-                    // setVisibleChart(!visibleChart)
-                    setVisibleChart(1)
-
-                    dataPointSelected(objectPointFormat)
+                    // setVisibleChart(false)
+                    dataPointSelected(objectPointFormat, idPoint)
                   },
                 }}
                 >
-                <Popup >
+                <Popup>
                   Id: {i.id}<br />
                   Lat: {i.lat}<br />
                   Lon: {i.lon}<br />
@@ -141,9 +145,7 @@ export default function Map (props) {
                   Group: {i.group}<br />
                   {/* Height{i.height}<br /> */}
                   {/* <TimeSeries/> */}
-
                 </Popup>
-
               </Marker>
             );
         })},
@@ -159,16 +161,14 @@ export default function Map (props) {
         />
         </MapContainer>
             {visibleChart && 
-
               <Container>
-                <button>Close</button>
                 <TimeSeries
-                    // hideTS={visibleChart}
-                    placeholder="Loading component One..."> 
+                  onClick={handleChildClick.bind(this)}
+                  dataTimesChart={targetPointTimes}
+                  dataValuesChart={targetPointValues}
+                > 
                 </TimeSeries>
               </Container>
-              
-             
             }
     </Container>
   );
@@ -177,3 +177,4 @@ export default function Map (props) {
 const ImgMarker = styled.img`
     width: 32px!important;
 `
+
