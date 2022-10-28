@@ -17,7 +17,6 @@ export default function Login () {
 
   return (
     <Section>
-
           {user ? (
               <>
                 <NavBar />
@@ -33,7 +32,6 @@ export default function Login () {
         <Col lg="8">         
             {user ? (
             <>
-        
               {' '}
               </>
             ) : (
@@ -60,7 +58,6 @@ export default function Login () {
             </Card>
               </>
             )}
-        
         </Col>
         <Col />
       </Row>

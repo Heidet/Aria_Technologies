@@ -58,8 +58,10 @@ export default function Map (props) {
     .then((res) => {
         // console.log(res)
         var dataSetProps = props.dataSet
-        const timeSeriesTimes = res.data.data[dataSetProps].atomic.times
+        // res.data.data.map((hour) => parseInt(hour.slice(11, 13)))
+        const timeSeriesTimes =  res.data.data[dataSetProps].atomic.times.map((times) =>console.log(times)) 
         const timeSeriesValues = res.data.data[dataSetProps].atomic.values[idPoint]
+
         // console.log('timeSeriesValues =>',timeSeriesValues)
         // console.log('timeSeriesTimes =>',timeSeriesTimes)
         setTargetPointTimes('')
@@ -94,7 +96,7 @@ export default function Map (props) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
     crossorigin=""/>,
-    <Container style={{width: "90%",display: "flex"}}>
+    <Container style={{width: "100%", display: "flex"}}>
         <MapContainer
             className="markercluster-map"
             center={[45.43200003998344, 9.225806119289835]}
@@ -130,7 +132,7 @@ export default function Map (props) {
                         "client": clientPoint
                       }
                     }
-                    // setVisibleChart(false)
+                    setVisibleChart(false)
                     dataPointSelected(objectPointFormat, idPoint)
                   },
                 }}

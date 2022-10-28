@@ -7,15 +7,10 @@ class TimeSeries extends Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
-    // const { hideCahrt } = props
-    // state = 
-    // this.state = {
-    //   showDiv: true
-    //   }
-    // const {onClick} = this.props;
+
     const {dataTimesChart} = props;
     const {dataValuesChart} = props;
-
+  
       this.state = ({
         options: {
           chart: {
@@ -37,6 +32,7 @@ class TimeSeries extends Component {
                 }]
               }
             },
+            width: '100%',
             id: "basic-bar"
           },
           xaxis: {
@@ -78,13 +74,10 @@ class TimeSeries extends Component {
           }
         ]
       })
-      console.log(this.state.options.xaxis)
   }
 
   componentDidMount() {
     console.log(this.myRef.current.props.series[0].data)
-
-    
   }
 
   componentDidUpdate() {
@@ -110,14 +103,14 @@ class TimeSeries extends Component {
     return (
       <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>,
       <script src="https://cdn.jsdelivr.net/npm/react-apexcharts"></script>,
-        
-      <div className="chart">
+
+      <div className="chart" style={{width: "100%"}}>
         <div className="row">
           <div className="mixed-chart">
-          <button onClick={onClick}>toggle</button>
+          {/* <button onClick={onClick}>toggle</button> */}
           {/* { showing 
             ?  */}
-            <Chart
+            <Chart style={{width: "100%"}}
             
               // options={this.myRef}
               ref={this.myRef}
